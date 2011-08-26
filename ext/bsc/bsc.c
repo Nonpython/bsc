@@ -20,9 +20,22 @@ void Init_bsc() {
 }
 VALUE ruby_bsc_compress(VALUE self, VALUE rb_input) {
     char *input = StringValue(rb_input);
-    unsigned char *output = (unsigned char *)bsc_malloc(25 + LIBBSC_HEADER_SIZE);
+    int blockSize = 25;
+    if (strlen(input) < blockSize) {
+        blockSize = strlen(input);
+    }
+    unsigned char *output = (unsigned char *)bsc_malloc(blockSize + LIBBSC_HEADER_SIZE);
     int n = strlen(input);
     bsc_compress(input, output, n, 0, 0, LIBBSC_BLOCKSORTER_BWT, LIBBSC_FEATURE_FASTMODE || LIBBSC_FEATURE_FASTMODE);
+    VALUE retval = rb_str_new2(output);
+    free(output);
+    return retval;
+}
+
+VALUE ruby_bsc_decompress(VALUE self, VALUE rb_input) {
+    char *input = StringValue(rb_input);
+    int inputSize = strlen(input);
+    bsc_decompress(input, inputSize, output, LIBBSC_BLOCKSORTER_BWT, LIBBSC_FEATURE_FASTMODE || LIBBSC_FEATURE_FASTMODE);
     VALUE retval = rb_str_new2(output);
     free(output);
     return retval;
