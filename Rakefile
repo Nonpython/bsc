@@ -10,18 +10,25 @@ rescue Bundler::BundlerError => e
   exit e.status_code
 end
 require 'rake'
+require 'rake/extensiontask'
 
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "bsc"
   gem.homepage = "http://github.com/nonpython/bsc"
-  gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.license = "Apache License version 2"
+  gem.summary = %Q{bsc is a Ruby gem that wraps the libbsc high-performance compression library.}
+  gem.description = %Q{bsc is a Ruby gem that wraps the libbsc high-performance compression library.}
   gem.email = "sasinestro@gmail.com"
   gem.authors = ["Hayes Williams"]
+  gem.platform = Gem::Platform::RUBY
+  gem.extensions = FileList["ext/**/extconf.rb"]
   # dependencies defined in Gemfile
+
+  # use rake-compiler   
+  Rake::ExtensionTask.new('bsc', gem)
+
 end
 Jeweler::RubygemsDotOrgTasks.new
 
