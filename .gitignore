@@ -48,3 +48,4 @@ tmtags
 #*.rbc
 
 tmp/*
+*.bundle
